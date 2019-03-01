@@ -17,37 +17,40 @@ namespace WCFClient
     {
         static void Main(string[] args)
         {
-            try
+            using (var cluster = new ServiceManager())
             {
-                ServiceManager manager;
-                var client = new ClusterClient();
-                client.ConfigureServices(x =>
+                try
                 {
-                    x.AddSingleton<IClusterConnectionFactory, SmartConnectionFactory>();
-                });
-                client.UseConfig<ClusterOptions>(new ClusterOptions() {
-                    ClusterID = "test"
-                });
-                client.OnReady += () =>
-                {
-                    try
+                    cluster.ConfigureServices(x =>
                     {
-                        manager = new ServiceManager(client);
-                        manager.Register<ITest>("WcfClient");
-                        Console.WriteLine(manager.Service<ITest>().Get());
-                    }
-                    catch(Exception ex) {
-                        Console.WriteLine(ex.Message);
-                    }
-                };
-                client.UseRedisClusterProvider(x =>
+                        x.AddSingleton<IClusterConnectionFactory, WcfConnectionFactory>();
+                    });
+                    cluster.UseConfig<ClusterOptions>(new ClusterOptions()
+                    {
+                        ClusterID = "test"
+                    });
+                    cluster.OnReady += () =>
+                    {
+                        try
+                        {
+                            cluster.Register<ITestB>("WcfClient");
+                            Console.WriteLine(cluster.Service<ITestB>().Get());
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    };
+                    cluster.UseRedisClusterProvider(x =>
+                    {
+                        x.ConnectionString = "localhost:7000,localhost:7001,localhost:7002,syncTimeout=30000,asyncTimeout=30000,allowAdmin=True,connectTimeout=5000,responseTimeout=5000,password=rdc!234";
+                    });
+                    cluster.Start();
+                }
+                catch (Exception ex)
                 {
-                    x.ConnectionString = "localhost:7000,localhost:7001,localhost:7002,syncTimeout=30000,asyncTimeout=30000,allowAdmin=True,connectTimeout=5000,responseTimeout=5000,password=rdc!234";
-                });
-                client.Start();
-            }
-            catch (Exception ex) {
-                Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.Message);
+                }                
             }
             Console.ReadKey();
         }

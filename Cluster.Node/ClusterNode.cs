@@ -15,5 +15,7 @@ namespace Cluster.Node
         public DateTime LastActiveTime { get; set; }
 
         public int NoReply { get; set; }
+
+        public Dictionary<string, string> Details { get; set; } = new Dictionary<string, string>();
     }
 }

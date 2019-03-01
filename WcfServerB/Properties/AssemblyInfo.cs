@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WcfServerA")]
+[assembly: AssemblyTitle("WcfServerB")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("WcfServerA")]
+[assembly: AssemblyProduct("WcfServerB")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d9f308c2-2d6c-4d55-bee3-3f71d056fe3d")]
+[assembly: Guid("c01db720-16a2-486e-a293-7b157ebdd71a")]
 
 // Version information for an assembly consists of the following four values:
 //

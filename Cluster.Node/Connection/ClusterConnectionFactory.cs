@@ -15,7 +15,7 @@ namespace Cluster.Node.Connection
             this.context = context;
         }
 
-        public IClusterConnection Get() {
+        public IClusterConnection Get(string gateway) {
             return new ClusterConnection(context);
         }
     }

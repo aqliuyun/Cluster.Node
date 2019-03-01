@@ -6,13 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using WCF.IBLL;
 
-namespace WcfServerA
+namespace WcfServerB
 {
     public class Test : ITest
     {
         public string Get()
         {
-            return "I am server A this is test, in process:"+Process.GetCurrentProcess().Id.ToString();
+            return "I am server B this is test, in process:"+Process.GetCurrentProcess().Id.ToString();
         }
     }
 }

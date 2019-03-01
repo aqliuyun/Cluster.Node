@@ -26,8 +26,7 @@ namespace Cluster.Node.Provider.Redis
             {
                 return ConnectionMultiplexer.Connect(context.GetService<RedisOptions>().ConnectionString);
             })
-                .AddSingleton<IClusterNodeProvider, ClusterNodeProvider>()
-                .AddSingleton<IGatewayProvider, GatewayProvider>();
+                .AddSingleton<IClusterNodeProvider, ClusterNodeProvider>();
             return services;
         }
     }

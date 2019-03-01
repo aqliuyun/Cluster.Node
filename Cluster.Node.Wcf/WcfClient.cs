@@ -12,7 +12,7 @@ namespace Cluster.Node.Wcf
         public T ClientChannel => this.Channel;
 
         public WcfClient(string endpointConfigurationName, string remoteAddress) : base(endpointConfigurationName, remoteAddress)
-        {
+        {            
         }
     }
 }

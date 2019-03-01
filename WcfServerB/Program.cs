@@ -1,26 +1,20 @@
 ﻿using Cluster.Node;
-using Cluster.Node.Provider.Redis;
 using Cluster.Node.Wcf;
-using Newtonsoft.Json;
+using Cluster.Node.Provider.Redis;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Reflection;
-using System.ServiceModel;
-using System.ServiceModel.Configuration;
-using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
-using WCF.IBLL;
 
-namespace WcfServerA
+namespace WcfServerB
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var cluster = new ClusterHost();            
+            var cluster = new ClusterHost();
             cluster.UseConfig<ClusterOptions>(new ClusterOptions()
             {
                 ClusterID = "test"
@@ -31,7 +25,7 @@ namespace WcfServerA
             });
             cluster.StartWcfService();
             cluster.Start();
-            Console.WriteLine("start");            
+            Console.WriteLine("start");
             Console.ReadLine();
             cluster.StopWcfService();
         }

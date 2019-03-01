@@ -50,7 +50,6 @@
   <ItemGroup>
     <Compile Include="ClusterClient.cs" />
     <Compile Include="Connection\ClusterConnection.cs" />
-    <Compile Include="Connection\HaConnection.cs" />
     <Compile Include="Connection\IClusterConnectionFactory.cs" />
     <Compile Include="Connection\ClusterConnectionFactory.cs" />
     <Compile Include="ClusterContext.cs" />
@@ -58,19 +57,24 @@
     <Compile Include="ClusterNode.cs" />
     <Compile Include="ClusterOptions.cs" />
     <Compile Include="Extension\ServiceCollectionExtensions.cs" />
+    <Compile Include="Filter\IGatewayFilter.cs" />
+    <Compile Include="GatewayProvider.cs" />
     <Compile Include="HostOptions.cs" />
     <Compile Include="Connection\IClusterConnection.cs" />
     <Compile Include="IClusterNodeProvider.cs" />
     <Compile Include="IGatewayProvider.cs" />
-    <Compile Include="LoadBalance\IConnectionManage.cs" />
+    <Compile Include="Connection\DefaultGatewayPipline.cs" />
+    <Compile Include="Connection\IConnectionManage.cs" />
     <Compile Include="IOptions.cs" />
+    <Compile Include="Connection\IGatewayPipeline.cs" />
     <Compile Include="LoadBalance\IGatewaySelector.cs" />
-    <Compile Include="LoadBalance\DefaultConnectionManage.cs" />
+    <Compile Include="Connection\DefaultConnectionManage.cs" />
     <Compile Include="LoadBalance\RandomSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

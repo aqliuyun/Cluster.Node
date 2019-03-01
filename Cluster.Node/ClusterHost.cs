@@ -8,18 +8,30 @@ using System.Threading.Tasks;
 
 namespace Cluster.Node
 {
-    public class ClusterHost
+    public class ClusterHost : IDisposable
     {
         private IServiceCollection collection;
         private IServiceProvider serviceProvider;
         private Timer heartbeat;
         public ClusterNode CurrentNode { get; private set; }
         private ClusterContext context;
+
+        public void UseRedisClusterProvider(Func<object, object> p)
+        {
+            throw new NotImplementedException();
+        }
+
         public ClusterHost()
         {
             collection = new ServiceCollection();
             context = new ClusterContext();
+            CurrentNode = new ClusterNode()
+            {                
+                LastActiveTime = DateTime.UtcNow
+            };
             collection.AddSingleton<ClusterContext>(context);
+            collection.AddSingleton<ClusterNode>(CurrentNode);
+            collection.AddSingleton<IGatewayProvider, GatewayProvider>();
         }
 
         public ClusterHost ConfigureServices(Action<IServiceCollection> services)
@@ -37,13 +49,9 @@ namespace Cluster.Node
         public void Start()
         {
             serviceProvider = collection.BuildServiceProvider();
-            CurrentNode = new ClusterNode()
-            {
-                Address = serviceProvider.GetService<HostOptions>().Address,
-                LastActiveTime = DateTime.UtcNow
-            };
+            CurrentNode.Address = serviceProvider.GetService<HostOptions>().Address;
             Task.Factory.StartNew(async () =>
-            {
+            {                
                 await serviceProvider.GetService<IGatewayProvider>().Init();
                 await serviceProvider.GetService<IClusterNodeProvider>().RegisterClusterNode(CurrentNode);
                 await serviceProvider.GetService<IClusterNodeProvider>().GetClusterNodeList();
@@ -53,6 +61,10 @@ namespace Cluster.Node
                     await serviceProvider.GetService<IClusterNodeProvider>().UpdateClusterNode(CurrentNode);
                 }, null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
             });
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

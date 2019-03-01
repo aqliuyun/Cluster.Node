@@ -8,6 +8,8 @@ namespace Cluster.Node.Connection
 {
     public interface IClusterConnection : IDisposable
     {
+        void UseGateway(string gateway);
+
         bool Connect();
     }
 }

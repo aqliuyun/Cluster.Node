@@ -11,24 +11,26 @@ using System.Threading.Tasks;
 
 namespace Cluster.Node
 {
-    public class ClusterClient
+    public class ClusterClient : IDisposable
     {
-        private IServiceCollection collection;
-        private IServiceProvider serviceProvider;
+        protected IServiceCollection collection;
+        protected IServiceProvider serviceProvider;
         private Timer heartbeat;
-        private ClusterContext context;
+        protected ClusterContext context;
         public Action OnReady;
         public ClusterClient()
         {
             collection = new ServiceCollection();
-            context = new ClusterContext();            
+            context = new ClusterContext();
             collection.AddSingleton<ClusterContext>(context);
             collection.AddSingleton<IGatewaySelector, RandomSelector>();
             collection.AddSingleton<IConnectionManage, DefaultConnectionManage>();
+            collection.AddSingleton<IGatewayProvider, GatewayProvider>();
+            collection.AddSingleton<IGatewayPipeline, DefaultGatewayPipline>();
         }
 
         public ClusterClient ConfigureServices(Action<IServiceCollection> config)
-        {            
+        {
             config?.Invoke(collection);
             return this;
         }
@@ -39,21 +41,27 @@ namespace Cluster.Node
             return this;
         }
 
-        public void Start()
+        public void Build()
         {
             serviceProvider = collection.BuildServiceProvider();
-            Task.Factory.StartNew(async () => {
-                await serviceProvider.GetService<IGatewayProvider>().Init();
-                context.Gateways = await serviceProvider.GetService<IGatewayProvider>().GetGateways();                
-                heartbeat = new Timer(async (x) => {
-                    context.Gateways = await serviceProvider.GetService<IGatewayProvider>().GetGateways();
-                }, null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
-                OnReady?.Invoke();
-            });            
         }
 
-        public IClusterConnection GetConnection() {
-            return serviceProvider.GetService<IConnectionManage>().GetConnection();
+        public virtual void Start()
+        {
+            Task.Factory.StartNew(async () =>
+            {
+                await serviceProvider.GetService<IGatewayProvider>().Init();
+                context.ClusterNodes = await serviceProvider.GetService<IClusterNodeProvider>().GetClusterNodeList();
+                heartbeat = new Timer(async (x) =>
+                {
+                    context.ClusterNodes = await serviceProvider.GetService<IClusterNodeProvider>().GetClusterNodeList();
+                }, null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
+                OnReady?.Invoke();
+            });
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

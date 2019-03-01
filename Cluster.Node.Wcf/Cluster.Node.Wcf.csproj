@@ -32,7 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.2.2.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
@@ -43,20 +53,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SmartConnectionFactory.cs" />
-    <Compile Include="SmartConnection.cs" />
-    <Compile Include="KeepAliveConnection.cs" />
+    <Compile Include="HostExtension.cs" />
+    <Compile Include="WcfConnectionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceManager.cs" />
-    <Compile Include="KeepAliveConnectionFactory.cs" />
     <Compile Include="IWcfConnection.cs" />
     <Compile Include="WcfClient.cs" />
+    <Compile Include="WcfConnection.cs" />
+    <Compile Include="WcfGatewayFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cluster.Node\Cluster.Node.csproj">
       <Project>{C6747003-FB32-4043-B88B-183B95A79CF9}</Project>
       <Name>Cluster.Node</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

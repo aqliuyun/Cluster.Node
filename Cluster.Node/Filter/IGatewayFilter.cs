@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cluster.Node.LoadBalance
+namespace Cluster.Node.Filter
 {
-    public interface IGatewaySelector
+    public interface IGatewayFilter
     {
-        string GetGateway(List<ClusterNode> nodes);
+        List<ClusterNode> Filter<T>(List<ClusterNode> nodes);
     }
 }

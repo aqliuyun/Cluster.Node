@@ -82,7 +82,6 @@
     <Compile Include="ClientExtension.cs" />
     <Compile Include="HostExtenstion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GatewayProvider.cs" />
     <Compile Include="RedisOptions.cs" />
     <Compile Include="ClusterNodeProvider.cs" />
   </ItemGroup>

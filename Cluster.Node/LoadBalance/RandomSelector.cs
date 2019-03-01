@@ -10,10 +10,9 @@ namespace Cluster.Node.LoadBalance
 {
     public class RandomSelector : IGatewaySelector
     {
-        private IServiceProvider serviceProvider;
-        private Random random;
-        private ClusterContext context;
-        private IClusterConnectionFactory connectionFactory;
+        protected Random random;
+        protected ClusterContext context;
+        protected IClusterConnectionFactory connectionFactory;
         public RandomSelector(IClusterConnectionFactory connectionFactory, ClusterContext context)
         {
             this.connectionFactory = connectionFactory;
@@ -21,9 +20,9 @@ namespace Cluster.Node.LoadBalance
             this.context = context;
         }
 
-        public virtual string GetGateway()
+        public virtual string GetGateway(List<ClusterNode> nodes)
         {
-            var gateways = context.Gateways;
+            var gateways = nodes.Select(x => x.Address).ToList();
             return gateways[random.Next(gateways.Count)];
         }
     }

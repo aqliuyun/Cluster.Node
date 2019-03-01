@@ -10,6 +10,8 @@ namespace Cluster.Node
     {
         Task Init();
 
-        Task<List<string>> GetGateways();
+        List<string> GetGateways();
+
+        ClusterNode GetClusterNode(string gateway);
     }
 }

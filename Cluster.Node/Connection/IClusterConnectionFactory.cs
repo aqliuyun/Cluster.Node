@@ -9,6 +9,6 @@ namespace Cluster.Node.Connection
 {
     public interface IClusterConnectionFactory
     {
-        IClusterConnection Get();
+        IClusterConnection Get(string gateway);
     }
 }

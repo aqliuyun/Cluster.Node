@@ -10,16 +10,17 @@ namespace Cluster.Node.Provider.Redis
 {
     public class ClusterNodeProvider : IClusterNodeProvider
     {
+        private readonly IConnectionMultiplexer _multiplexer;
         private readonly IDatabase _db;
         private readonly RedisOptions _redisOptions;
         private readonly ClusterOptions _clusterOptions;
-
         public ClusterNodeProvider(IConnectionMultiplexer multiplexer, RedisOptions redisOptions, ClusterOptions clusterOptions)
         {
             _redisOptions = redisOptions;
+            _multiplexer = multiplexer;
             _db = multiplexer.GetDatabase(_redisOptions.Database);
             _clusterOptions = clusterOptions;
-        }
+        }    
 
         public async Task<List<ClusterNode>> GetClusterNodeList()
         {

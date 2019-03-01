@@ -9,14 +9,18 @@ namespace Cluster.Node.Connection
 {
     public class ClusterConnection : IClusterConnection
     {
-        private IGatewaySelector gatewaySelector;
-        private IClusterConnectionFactory factory;
         protected ClusterContext context;
         protected string gateway;
-
+        public int RetryTimes { get; set; }
+        public Action OnDisconnected;
         public ClusterConnection(ClusterContext context)
         {
             this.context = context;
+        }
+
+        public void UseGateway(string gateway)
+        {
+            this.gateway = gateway;
         }
 
         public bool Connect()

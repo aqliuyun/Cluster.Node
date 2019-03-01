@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cluster.Node.LoadBalance
+namespace Cluster.Node.Connection
 {
     public interface IConnectionManage
     {
-        IClusterConnection GetConnection();
+        IClusterConnection GetConnection<T>();
     }
 }

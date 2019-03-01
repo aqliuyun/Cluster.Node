@@ -1,38 +1,41 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using Cluster.Node.Connection;
+using Cluster.Node.Extension;
 
 namespace Cluster.Node.Wcf
 {
-    public class ServiceManager
-    {
-        private ClusterClient client;
-
-        public ConcurrentDictionary<Type, IWcfConnection> Connections = new ConcurrentDictionary<Type, IWcfConnection>();
-
-        public ServiceManager(ClusterClient client)
+    public class ServiceManager : ClusterClient
+    {        
+        public ServiceManager():base()
         {
-            this.client = client;
+            collection.AddSingleton<WcfGatewayFilter>();
         }
 
-        public T Register<T>(string endpointConfigName) where T : class
+        public void Register<T>(string endpointConfigName) where T : class
         {
-            var connection = ((IWcfConnection)client.GetConnection()).Bind(endpointConfigName);
-            Connections.TryAdd(typeof(T), connection);
-            return connection.As<T>();
+            var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
+            var connection = connectionManage.GetConnection<T>();
+            ((IWcfConnection)connection).Bind(endpointConfigName);
         }
 
         public T Service<T>() where T : class
         {
-            if(Connections.TryGetValue(typeof(T), out IWcfConnection connection))
-            {
-                return connection.As<T>();
-            }
-            return default(T);
+            var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
+            var connection = connectionManage.GetConnection<T>();
+            return ((IWcfConnection)connection).As<T>();
+        }
+
+        public override void Start()
+        {
+            this.serviceProvider.GetService<IGatewayPipeline>().AddFilters(this.serviceProvider.GetService<WcfGatewayFilter>());
+            base.Start();
         }
     }
 }

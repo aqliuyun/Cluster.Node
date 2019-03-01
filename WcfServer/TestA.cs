@@ -8,11 +8,11 @@ using WCF.IBLL;
 
 namespace WcfServerA
 {
-    public class Test : ITest
+    public class TestA : ITestA
     {
         public string Get()
         {
-            return "I am server A this is test, in process:"+Process.GetCurrentProcess().Id.ToString();
+            return "I am server A this is test a, in process:"+Process.GetCurrentProcess().Id.ToString();
         }
     }
 }
