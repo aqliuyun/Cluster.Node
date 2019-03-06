@@ -15,10 +15,13 @@ namespace Cluster.Node.Connection
         private IClusterConnectionFactory factory;
         private IGatewayPipeline gatewayFilter;
         private IGatewaySelector gatewaySelector;
+        private IGatewayProvider gatewayProvider;
+        private IClusterNodeProvider clusterNodeProvider;
         private ClusterOptions options;
-        public DefaultConnectionManage(IClusterConnectionFactory factory,IGatewayPipeline gatewayFilter,IGatewaySelector gatewaySelector,ClusterOptions options)
+        public DefaultConnectionManage(IClusterConnectionFactory factory,IClusterNodeProvider clusterNodeProvider,IGatewayPipeline gatewayFilter,IGatewaySelector gatewaySelector,ClusterOptions options)
         {
             this.factory = factory;
+            this.clusterNodeProvider = clusterNodeProvider;
             this.gatewayFilter = gatewayFilter;
             this.gatewaySelector = gatewaySelector;
             this.options = options;
@@ -33,11 +36,13 @@ namespace Cluster.Node.Connection
             var nodes = gatewayFilter.GetAvaliableNodes<T>();
             var key = gatewaySelector.GetGateway(nodes);
             var connection = factory.Get(key) as ClusterConnection;
-            connection.OnDisconnected += () =>
-            {
+            connection.OnDisconnected += (gateway) =>
+            {                
                 Task.Factory.StartNew(async () =>
                 {
-                    await Task.Delay(options.RetryInterval).ContinueWith(x =>
+                    var node = this.gatewayProvider.GetClusterNode(gateway);
+                    await this.clusterNodeProvider.UpdateClusterNode(node,(x)=> { x.NoReply++; });
+                    await Task.Delay(TimeSpan.FromSeconds(options.RetryInterval)).ContinueWith(x =>
                     {
                         try
                         {
@@ -47,7 +52,7 @@ namespace Cluster.Node.Connection
                                 return;
                             }
                             connection.RetryTimes++;
-                            connection.UseGateway(gatewaySelector.GetGateway(nodes));
+                            connection.UseGateway(gatewaySelector.GetGateway(gatewayFilter.GetAvaliableNodes<T>()));
                             connection.Connect();
                         }
                         catch { }

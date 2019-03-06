@@ -34,9 +34,9 @@ namespace Cluster.Node.Wcf
         public T As<T>() where T : class
         {
             this._interface_type = typeof(T);
-            this._instance_type = typeof(WcfClient<T>);
+            this._instance_type = typeof(WcfClientProxy<T>);
             this.Open();
-            return ((WcfClient<T>)_instance).ClientChannel;
+            return ((WcfClientProxy<T>)_instance).ClientChannel;
         }
 
         private void Open()
@@ -60,7 +60,7 @@ namespace Cluster.Node.Wcf
             lock (_instance)
             {
                 IsBusy = true;
-                OnDisconnected?.Invoke();
+                OnDisconnected?.Invoke(this.gateway);
             }
         }
 
@@ -71,6 +71,7 @@ namespace Cluster.Node.Wcf
             {
                 var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(list);
                 _instance = (ICommunicationObject)Activator.CreateInstance(_instance_type, _endpointConfigName, dict[_interface_type.FullName]);
+                this.OnConnected?.Invoke(_instance);
                 IsBusy = false;
                 return true;
             }

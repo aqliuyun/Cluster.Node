@@ -8,14 +8,8 @@ namespace Cluster.Node
 {
     public class ClusterContext
     {
-        public List<string> Gateways
-        {
-            get
-            {
-                return ClusterNodes.Select(x => x.Address).ToList();
-            }
-        }
-
         public List<ClusterNode> ClusterNodes { get; set; }
+
+        public string ServerName { get; set; }
     }
 }

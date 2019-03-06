@@ -57,6 +57,7 @@
     <Compile Include="ClusterNode.cs" />
     <Compile Include="ClusterOptions.cs" />
     <Compile Include="Extension\ServiceCollectionExtensions.cs" />
+    <Compile Include="Filter\DefaultGatewayFilter.cs" />
     <Compile Include="Filter\IGatewayFilter.cs" />
     <Compile Include="GatewayProvider.cs" />
     <Compile Include="HostOptions.cs" />
@@ -65,7 +66,6 @@
     <Compile Include="IGatewayProvider.cs" />
     <Compile Include="Connection\DefaultGatewayPipline.cs" />
     <Compile Include="Connection\IConnectionManage.cs" />
-    <Compile Include="IOptions.cs" />
     <Compile Include="Connection\IGatewayPipeline.cs" />
     <Compile Include="LoadBalance\IGatewaySelector.cs" />
     <Compile Include="Connection\DefaultConnectionManage.cs" />

@@ -1,5 +1,6 @@
 ﻿using Cluster.Node.Connection;
 using Cluster.Node.Extension;
+using Cluster.Node.Filter;
 using Cluster.Node.LoadBalance;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,6 +28,7 @@ namespace Cluster.Node
             collection.AddSingleton<IConnectionManage, DefaultConnectionManage>();
             collection.AddSingleton<IGatewayProvider, GatewayProvider>();
             collection.AddSingleton<IGatewayPipeline, DefaultGatewayPipline>();
+            collection.AddSingleton<DefaultGatewayFilter>();
         }
 
         public ClusterClient ConfigureServices(Action<IServiceCollection> config)
@@ -48,8 +50,10 @@ namespace Cluster.Node
 
         public virtual void Start()
         {
+            this.serviceProvider.GetService<IGatewayPipeline>().AddFilters(this.serviceProvider.GetService<DefaultGatewayFilter>());
             Task.Factory.StartNew(async () =>
             {
+                context.ServerName = serviceProvider.GetService<ClusterOptions>().ServerName;                
                 await serviceProvider.GetService<IGatewayProvider>().Init();
                 context.ClusterNodes = await serviceProvider.GetService<IClusterNodeProvider>().GetClusterNodeList();
                 heartbeat = new Timer(async (x) =>

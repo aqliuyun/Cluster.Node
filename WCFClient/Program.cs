@@ -17,7 +17,7 @@ namespace WCFClient
     {
         static void Main(string[] args)
         {
-            using (var cluster = new ServiceManager())
+            using (var cluster = new WcfClient())
             {
                 try
                 {

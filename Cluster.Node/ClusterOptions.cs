@@ -10,16 +10,22 @@ namespace Cluster.Node
     {
         public string ClusterID { get; set; }
 
-        public int MaxRetryTimes { get; set; } = DEFAULT_MAX_REPLYTIME;
-
-        public int RetryInterval { get; set; } = DEFAULT_MAX_REPLYINTERVAL;
-
-        public int MaxNoReply { get; set; } = DEFAULT_MAX_NO_REPLY;
-
-        public const int DEFAULT_MAX_NO_REPLY = 5;
-
-        public const int DEFAULT_MAX_REPLYTIME = 5;
-
-        public const int DEFAULT_MAX_REPLYINTERVAL = 10000;
+        public string ServerName { get; set; }
+        /// <summary>
+        /// reconnection times
+        /// </summary>
+        public int MaxRetryTimes { get; set; } = 5;
+        /// <summary>
+        /// reconnection delay time
+        /// </summary>
+        public int RetryInterval { get; set; } = 5;
+        /// <summary>
+        /// max no reply times,will mark it dead
+        /// </summary>
+        public int MaxNoReply { get; set; } = 10;
+        /// <summary>
+        /// max no active time,will mark it dead
+        /// </summary>
+        public TimeSpan MaxNoActiveTime { get; set; } = TimeSpan.FromSeconds(30);
     }
 }

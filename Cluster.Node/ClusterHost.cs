@@ -15,12 +15,7 @@ namespace Cluster.Node
         private Timer heartbeat;
         public ClusterNode CurrentNode { get; private set; }
         private ClusterContext context;
-
-        public void UseRedisClusterProvider(Func<object, object> p)
-        {
-            throw new NotImplementedException();
-        }
-
+      
         public ClusterHost()
         {
             collection = new ServiceCollection();
@@ -46,9 +41,15 @@ namespace Cluster.Node
             return this;
         }
 
+        public T GetConfig<T>() where T : class
+        {
+            return serviceProvider.GetService<T>();
+        }
+
         public void Start()
         {
             serviceProvider = collection.BuildServiceProvider();
+            context.ServerName = serviceProvider.GetService<ClusterOptions>().ServerName;
             CurrentNode.Address = serviceProvider.GetService<HostOptions>().Address;
             Task.Factory.StartNew(async () =>
             {                
@@ -58,7 +59,7 @@ namespace Cluster.Node
                 heartbeat = new Timer(async (x) =>
                 {
                     CurrentNode.LastActiveTime = DateTime.UtcNow;
-                    await serviceProvider.GetService<IClusterNodeProvider>().UpdateClusterNode(CurrentNode);
+                    await serviceProvider.GetService<IClusterNodeProvider>().UpdateClusterNodeAsync(CurrentNode);
                 }, null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
             });
         }

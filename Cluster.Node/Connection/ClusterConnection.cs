@@ -12,7 +12,8 @@ namespace Cluster.Node.Connection
         protected ClusterContext context;
         protected string gateway;
         public int RetryTimes { get; set; }
-        public Action OnDisconnected;
+        public Action<object> OnConnected;
+        public Action<string> OnDisconnected;
         public ClusterConnection(ClusterContext context)
         {
             this.context = context;

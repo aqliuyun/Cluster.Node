@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{993B1575-A0B7-4D38-8ED4-19186D99DBC2}</ProjectGuid>
+    <ProjectGuid>{A93DD233-FA87-4EFB-86FA-F17159E06E5C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cluster.Node.Wcf</RootNamespace>
-    <AssemblyName>Cluster.Node.Wcf</AssemblyName>
+    <RootNamespace>Cluster.Node.WebApi</RootNamespace>
+    <AssemblyName>Cluster.Node.WebApi</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,9 +41,7 @@
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,13 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HostExtension.cs" />
-    <Compile Include="WcfConnectionFactory.cs" />
+    <Compile Include="IWebApiConnection.cs" />
+    <Compile Include="WebApiConnection.cs" />
+    <Compile Include="WebApiConnectionFactory.cs" />
+    <Compile Include="WebApiGatewayFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WcfClient.cs" />
-    <Compile Include="IWcfConnection.cs" />
-    <Compile Include="WcfClientProxy.cs" />
-    <Compile Include="WcfConnection.cs" />
-    <Compile Include="WcfGatewayFilter.cs" />
+    <Compile Include="WebApiClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cluster.Node\Cluster.Node.csproj">
