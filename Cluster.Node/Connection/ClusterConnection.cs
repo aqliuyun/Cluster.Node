@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Cluster.Node.Connection
@@ -11,12 +12,16 @@ namespace Cluster.Node.Connection
     {
         protected ClusterContext context;
         protected string gateway;
-        public int RetryTimes { get; set; }
+        private int _retryTime = 0;
+        public int RetryTimes { get { return _retryTime; } private set { _retryTime = value; } }
         public Action<object> OnConnected;
+        public Action<string> OnRetryConnect;
         public Action<string> OnDisconnected;
+        private SemaphoreSlim semaphore;
         public ClusterConnection(ClusterContext context)
         {
             this.context = context;
+            this.semaphore = new SemaphoreSlim(1);
         }
 
         public void UseGateway(string gateway)
@@ -26,7 +31,13 @@ namespace Cluster.Node.Connection
 
         public bool Connect()
         {
-            return this.Connect(gateway);
+            if(this.Connect(gateway))
+            {
+                Interlocked.Exchange(ref _retryTime,0);
+                return true;
+            }
+            this.OnRetryConnect?.Invoke(gateway);
+            return false;
         }
 
         public virtual bool Connect(string gateway)
@@ -36,6 +47,22 @@ namespace Cluster.Node.Connection
 
         public void Dispose()
         {            
+        }
+
+        public void AcquireLock()
+        {
+            this.semaphore.Wait();
+        }
+
+        public void ReleaseLock()
+        {
+            this.semaphore.Release();
+        }
+
+        public bool ReConnect()
+        {
+            Interlocked.Increment(ref _retryTime);
+            return Connect();
         }
     }
 }

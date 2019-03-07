@@ -25,19 +25,25 @@ namespace Cluster.Node.WebApi
 
         public override bool Connect(string gateway)
         {
-            var node = _gatewayProvider.GetClusterNode(gateway);
-            _instance = new HttpClient()
+            try
             {
-                BaseAddress = new Uri(node.Address)
-            };
-            _instance.DefaultRequestHeaders.Accept.Clear();
-            _instance.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            this.OnConnected?.Invoke(_instance);
-            return true;
+                var node = _gatewayProvider.GetClusterNode(gateway);
+                _instance = new HttpClient()
+                {
+                    BaseAddress = new Uri(node.Address)
+                };
+                _instance.DefaultRequestHeaders.Accept.Clear();
+                _instance.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                this.OnConnected?.Invoke(_instance);
+                return true;
+            }
+            catch { }
+            return false;
         }
 
         public async Task<T> GetAsync<T>(string url)
         {
+            this.Connect();
             var res = await _instance.GetAsync(url);
             if (res.IsSuccessStatusCode)
             {
@@ -49,6 +55,7 @@ namespace Cluster.Node.WebApi
 
         public async Task<T> PostAsync<T>(string url, object data)
         {
+            this.Connect();
             var res = await _instance.PostAsync(url, new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json"));
             if (res.IsSuccessStatusCode)
             {
@@ -60,6 +67,7 @@ namespace Cluster.Node.WebApi
 
         public async Task<T> PutAsync<T>(string url, object data)
         {
+            this.Connect();
             var res = await _instance.PutAsync(url, new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json"));
             if (res.IsSuccessStatusCode)
             {
@@ -71,6 +79,7 @@ namespace Cluster.Node.WebApi
 
         public async Task<T> DeleteAsync<T>(string url)
         {
+            this.Connect();
             var res = await _instance.DeleteAsync(url);
             if (res.IsSuccessStatusCode)
             {

@@ -11,5 +11,11 @@ namespace Cluster.Node.Connection
         void UseGateway(string gateway);
 
         bool Connect();
+
+        bool ReConnect();
+
+        void AcquireLock();
+
+        void ReleaseLock();
     }
 }

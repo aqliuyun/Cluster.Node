@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cluster.Node.LoadBalance;
 using System.Collections.Concurrent;
+using System.Threading;
 
 namespace Cluster.Node.Connection
 {
@@ -36,8 +37,9 @@ namespace Cluster.Node.Connection
             var nodes = gatewayFilter.GetAvaliableNodes<T>();
             var key = gatewaySelector.GetGateway(nodes);
             var connection = factory.Get(key) as ClusterConnection;
-            connection.OnDisconnected += (gateway) =>
-            {                
+            connection.OnRetryConnect += (gateway) =>
+            {
+                connection.AcquireLock();
                 Task.Factory.StartNew(async () =>
                 {
                     var node = this.gatewayProvider.GetClusterNode(gateway);
@@ -48,14 +50,16 @@ namespace Cluster.Node.Connection
                         {
                             if (connection.RetryTimes > options.MaxRetryTimes)
                             {
-                                Connections.TryRemove(typeof(T).FullName,out value);
+                                Connections.TryRemove(typeof(T).FullName, out value);
                                 return;
-                            }
-                            connection.RetryTimes++;
+                            }                            
                             connection.UseGateway(gatewaySelector.GetGateway(gatewayFilter.GetAvaliableNodes<T>()));
-                            connection.Connect();
+                            connection.ReConnect();
                         }
                         catch { }
+                        finally {
+                            connection.ReleaseLock();
+                        }
                     });
                 });
             };

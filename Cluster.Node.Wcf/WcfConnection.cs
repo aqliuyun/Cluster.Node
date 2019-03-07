@@ -16,13 +16,11 @@ namespace Cluster.Node.Wcf
         private Type _instance_type;
         private Type _interface_type;
         private IGatewayProvider _gatewayProvider;
-        
+
         public WcfConnection(IGatewayProvider gatewayProvider, ClusterContext context) : base(context)
         {
             this._gatewayProvider = gatewayProvider;
         }
-
-        public bool IsBusy { get; set; }
 
         public IWcfConnection Bind(string endpointConfigName)
         {
@@ -41,17 +39,29 @@ namespace Cluster.Node.Wcf
 
         private void Open()
         {
-            if (_instance == null || _instance.State != System.ServiceModel.CommunicationState.Opened)
+            try
             {
-                try
+                if (_instance == null || _instance.State != System.ServiceModel.CommunicationState.Opened)
                 {
-                    this.Connect();
-                    _instance.Faulted += Faulted;
+                    lock (_instance)
+                    {
+                        if (_instance == null || _instance.State != System.ServiceModel.CommunicationState.Opened)
+                        {
+                            if (this.Connect())
+                            {
+                                _instance.Faulted += Faulted;
+                            }
+                            else
+                            {
+                                OnDisconnected?.Invoke(this.gateway);
+                            }
+                        }
+
+                    }
                 }
-                catch (Exception ex)
-                {
-                    IsBusy = true;
-                }
+            }
+            catch (Exception ex)
+            {
             }
         }
 
@@ -59,24 +69,29 @@ namespace Cluster.Node.Wcf
         {
             lock (_instance)
             {
-                IsBusy = true;
-                OnDisconnected?.Invoke(this.gateway);
+                OnRetryConnect?.Invoke(this.gateway);
             }
         }
 
         public override bool Connect(string gateway)
         {
-            var node = _gatewayProvider.GetClusterNode(gateway);
-            if (node.Details.TryGetValue("contract", out string list))
+            try
             {
-                var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(list);
-                _instance = (ICommunicationObject)Activator.CreateInstance(_instance_type, _endpointConfigName, dict[_interface_type.FullName]);
-                this.OnConnected?.Invoke(_instance);
-                IsBusy = false;
-                return true;
+                var node = _gatewayProvider.GetClusterNode(gateway);
+                if (node.Details.TryGetValue("contract", out string list))
+                {
+                    var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(list);
+                    _instance = (ICommunicationObject)Activator.CreateInstance(_instance_type, _endpointConfigName, dict[_interface_type.FullName]);
+                    this.OnConnected?.Invoke(_instance);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
             return false;
-        }       
+        }
 
         public void Dispose()
         {
