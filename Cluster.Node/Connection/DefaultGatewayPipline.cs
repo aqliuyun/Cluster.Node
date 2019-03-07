@@ -16,12 +16,12 @@ namespace Cluster.Node.Connection
             this.context = context;
         }
 
-        public List<ClusterNode> GetAvaliableNodes<T>()
+        public List<ClusterNode> GetAvaliableNodes(IConnectionToken token)
         {
             var nodes = context.ClusterNodes;
             foreach (var filter in filters)
             {
-                nodes = filter.Filter<T>(nodes);
+                nodes = filter.Filter(token, nodes);
             }
             return nodes;
         }

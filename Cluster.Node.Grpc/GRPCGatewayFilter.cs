@@ -17,7 +17,7 @@ namespace Cluster.Node.gRPC
             this.context = context;
         }
 
-        public List<ClusterNode> Filter<T>(List<ClusterNode> nodes)
+        public List<ClusterNode> Filter(IConnectionToken token, List<ClusterNode> nodes)
         {
             var list = new List<ClusterNode>();
             foreach (var node in nodes)

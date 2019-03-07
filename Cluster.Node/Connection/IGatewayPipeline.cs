@@ -9,7 +9,7 @@ namespace Cluster.Node.Connection
 {
     public interface IGatewayPipeline
     {
-        List<ClusterNode> GetAvaliableNodes<T>();
+        List<ClusterNode> GetAvaliableNodes(IConnectionToken token);
 
         void AddFilters(params IGatewayFilter[] filter);
 

@@ -18,10 +18,17 @@ namespace Cluster.Node.gRPC
             collection.AddSingleton<GrpcGatewayFilter>();
         }
 
-        public T Service<T>() where T : ClientBase,new()
+        public T Service<T>(IConnectionToken token) where T : ClientBase,new()
         {
             var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
-            var connection = connectionManage.GetConnection<T>();
+            var connection = connectionManage.GetConnection(token);
+            return ((IGrpcConnection)connection).As<T>();
+        }
+
+        public T Service<T>() where T : ClientBase, new()
+        {
+            var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
+            var connection = connectionManage.GetConnection(new ServiceNameToken(context.ServerName));
             return ((IGrpcConnection)connection).As<T>();
         }
 

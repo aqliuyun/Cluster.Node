@@ -51,14 +51,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authenticate\AuthenticatedGatewayFilter.cs" />
+    <Compile Include="Authenticate\IAuthenticateService.cs" />
     <Compile Include="ClusterClient.cs" />
     <Compile Include="Connection\ClusterConnection.cs" />
+    <Compile Include="Connection\IAuthenticatedConnectionToken.cs" />
     <Compile Include="Connection\IClusterConnectionFactory.cs" />
     <Compile Include="Connection\ClusterConnectionFactory.cs" />
     <Compile Include="ClusterContext.cs" />
     <Compile Include="ClusterHost.cs" />
     <Compile Include="ClusterNode.cs" />
     <Compile Include="ClusterOptions.cs" />
+    <Compile Include="Connection\IConnectionToken.cs" />
+    <Compile Include="Connection\InterfaceNameToken.cs" />
+    <Compile Include="Connection\ServiceNameToken.cs" />
     <Compile Include="Extension\ServiceCollectionExtensions.cs" />
     <Compile Include="Filter\DefaultGatewayFilter.cs" />
     <Compile Include="Filter\IGatewayFilter.cs" />

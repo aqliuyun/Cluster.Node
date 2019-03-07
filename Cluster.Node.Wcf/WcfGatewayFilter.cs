@@ -12,14 +12,14 @@ namespace Cluster.Node.Wcf
 {
     public class WcfGatewayFilter : IGatewayFilter
     {
-        public List<ClusterNode> Filter<T>(List<ClusterNode> nodes)
+        public List<ClusterNode> Filter(IConnectionToken token, List<ClusterNode> nodes)
         {
             var list = new List<ClusterNode>();
             foreach (var node in nodes)
             {
                 if (node.Details.TryGetValue("contract", out string supports))
                 {
-                    if(supports.IndexOf(typeof(T).FullName) >= 0)
+                    if(supports.IndexOf(token.Name()) >= 0)
                     {
                         list.Add(node);
                     }

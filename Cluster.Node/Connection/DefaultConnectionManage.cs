@@ -28,13 +28,13 @@ namespace Cluster.Node.Connection
             this.options = options;
         }
 
-        public IClusterConnection GetConnection<T>()
+        public IClusterConnection GetConnection(IConnectionToken token)
         {
-            if (Connections.TryGetValue(typeof(T).FullName, out IClusterConnection value))
+            if (Connections.TryGetValue(token.UniqueKey(), out IClusterConnection value))
             {
                 return value;
             }
-            var nodes = gatewayFilter.GetAvaliableNodes<T>();
+            var nodes = gatewayFilter.GetAvaliableNodes(token);
             var key = gatewaySelector.GetGateway(nodes);
             var connection = factory.Get(key) as ClusterConnection;
             connection.OnRetryConnect += (gateway) =>
@@ -50,10 +50,10 @@ namespace Cluster.Node.Connection
                         {
                             if (connection.RetryTimes > options.MaxRetryTimes)
                             {
-                                Connections.TryRemove(typeof(T).FullName, out value);
+                                Connections.TryRemove(token.UniqueKey(), out value);
                                 return;
                             }                            
-                            connection.UseGateway(gatewaySelector.GetGateway(gatewayFilter.GetAvaliableNodes<T>()));
+                            connection.UseGateway(gatewaySelector.GetGateway(gatewayFilter.GetAvaliableNodes(token)));
                             connection.ReConnect();
                         }
                         catch { }

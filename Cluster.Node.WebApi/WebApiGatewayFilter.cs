@@ -1,4 +1,5 @@
-﻿using Cluster.Node.Filter;
+﻿using Cluster.Node.Connection;
+using Cluster.Node.Filter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +10,15 @@ namespace Cluster.Node.WebApi
 {
     public class WebApiGatewayFilter : IGatewayFilter
     {
-        private ClusterContext context;
-        public WebApiGatewayFilter(ClusterContext context)
-        {
-            this.context = context;
-        }
 
-        public List<ClusterNode> Filter<T>(List<ClusterNode> nodes)
+        public List<ClusterNode> Filter(IConnectionToken token, List<ClusterNode> nodes)
         {
             var list = new List<ClusterNode>();
             foreach (var node in nodes)
             {
                 if (node.Details.TryGetValue("name", out string name))
                 {
-                    if (name.Equals(context.ServerName))
+                    if (name.Equals(token.Name()))
                     {
                         list.Add(node);
                     }

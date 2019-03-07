@@ -18,17 +18,26 @@ namespace Cluster.Node.Wcf
             collection.AddSingleton<WcfGatewayFilter>();
         }
 
-        public void Register<T>(string endpointConfigName) where T : class
+        public IConnectionToken Register<T>(string endpointConfigName) where T : class
         {
             var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
-            var connection = connectionManage.GetConnection<T>();
+            var token = new InterfaceNameToken<T>();
+            var connection = connectionManage.GetConnection(token);
             ((IWcfConnection)connection).Bind(endpointConfigName);
+            return token;
         }
 
         public T Service<T>() where T : class
         {
             var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
-            var connection = connectionManage.GetConnection<T>();
+            var connection = connectionManage.GetConnection(new InterfaceNameToken<T>());
+            return ((IWcfConnection)connection).As<T>();
+        }
+
+        public T Service<T>(IConnectionToken token) where T : class
+        {
+            var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
+            var connection = connectionManage.GetConnection(token);
             return ((IWcfConnection)connection).As<T>();
         }
 
