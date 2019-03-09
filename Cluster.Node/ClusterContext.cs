@@ -10,6 +10,8 @@ namespace Cluster.Node
     {
         public List<ClusterNode> ClusterNodes { get; set; }
 
-        public string ServerName { get; set; }
+        public List<ClusterNode> BlackList { get; private set; } = new List<ClusterNode>();
+
+        public string ServiceName { get; set; }
     }
 }

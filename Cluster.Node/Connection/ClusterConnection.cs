@@ -26,11 +26,17 @@ namespace Cluster.Node.Connection
 
         public void UseGateway(string gateway)
         {
+            if(string.IsNullOrWhiteSpace(gateway))
+            {
+                this.OnDisconnected?.Invoke(this.gateway);
+                return;
+            }
             this.gateway = gateway;
         }
 
         public bool Connect()
         {
+            if (string.IsNullOrWhiteSpace(gateway)) return false;
             if(this.Connect(gateway))
             {
                 Interlocked.Exchange(ref _retryTime,0);

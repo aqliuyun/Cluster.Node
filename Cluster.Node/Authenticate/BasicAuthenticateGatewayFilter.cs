@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Cluster.Node.Authenticate
 {
-    public class AuthenticatedGatewayFilter : IGatewayFilter
+    public class BasicAuthenticateGatewayFilter : IGatewayFilter
     {
         private readonly IAuthenticateService authenticateService;
 
-        public AuthenticatedGatewayFilter(IAuthenticateService authenticateService)
+        public BasicAuthenticateGatewayFilter(IAuthenticateService authenticateService)
         {
             this.authenticateService = authenticateService;
         }

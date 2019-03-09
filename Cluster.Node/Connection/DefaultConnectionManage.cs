@@ -52,8 +52,9 @@ namespace Cluster.Node.Connection
                             {
                                 Connections.TryRemove(token.UniqueKey(), out value);
                                 return;
-                            }                            
-                            connection.UseGateway(gatewaySelector.GetGateway(gatewayFilter.GetAvaliableNodes(token)));
+                            }
+                            var next = gatewaySelector.GetGateway(gatewayFilter.GetAvaliableNodes(token));                            
+                            connection.UseGateway(next);
                             connection.ReConnect();
                         }
                         catch { }

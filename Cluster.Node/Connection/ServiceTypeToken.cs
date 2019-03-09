@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Cluster.Node.Connection
 {
-    public interface IAuthenticatedConnectionToken : IConnectionToken
+    public class ServiceTypeToken<T> : DefaultConnectionToken
     {
-        string Token();
+
+        public ServiceTypeToken(string key = null) : base(typeof(T).FullName, key)
+        {
+        }
     }
 }

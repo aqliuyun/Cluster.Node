@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Cluster.Node.Connection
 {
-    public class InterfaceNameToken<T> : IConnectionToken
+    public abstract class DefaultConnectionToken : IConnectionToken
     {
-        private string _key;
-
-        public InterfaceNameToken(string key = null)
+        protected string _name;
+        protected string _key;
+        public DefaultConnectionToken(string name, string key)
         {
+            this._name = name;
             if (!string.IsNullOrWhiteSpace(key))
             {
                 this._key = key;
@@ -24,12 +25,12 @@ namespace Cluster.Node.Connection
 
         public string Name()
         {
-            return typeof(T).FullName;
+            return _name;
         }
 
         public string UniqueKey()
         {
-            return this._key;
+            return _key;
         }
     }
 }

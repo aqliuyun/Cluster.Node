@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.2.2.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
@@ -51,9 +52,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authenticate\AuthenticatedGatewayFilter.cs" />
+    <Compile Include="Authenticate\NoneAuthenticateGatewayFilter.cs" />
+    <Compile Include="Authenticate\BasicAuthenticateGatewayFilter.cs" />
+    <Compile Include="Authenticate\BasicAuthenticateExtenstion.cs" />
+    <Compile Include="Authenticate\BasicAuthenticateService.cs" />
     <Compile Include="Authenticate\IAuthenticateService.cs" />
     <Compile Include="ClusterClient.cs" />
+    <Compile Include="Connection\AuthenticatedConnectionToken.cs" />
+    <Compile Include="Connection\DefaultConnectionToken.cs" />
     <Compile Include="Connection\ClusterConnection.cs" />
     <Compile Include="Connection\IAuthenticatedConnectionToken.cs" />
     <Compile Include="Connection\IClusterConnectionFactory.cs" />
@@ -63,7 +69,7 @@
     <Compile Include="ClusterNode.cs" />
     <Compile Include="ClusterOptions.cs" />
     <Compile Include="Connection\IConnectionToken.cs" />
-    <Compile Include="Connection\InterfaceNameToken.cs" />
+    <Compile Include="Connection\ServiceTypeToken.cs" />
     <Compile Include="Connection\ServiceNameToken.cs" />
     <Compile Include="Extension\ServiceCollectionExtensions.cs" />
     <Compile Include="Filter\DefaultGatewayFilter.cs" />

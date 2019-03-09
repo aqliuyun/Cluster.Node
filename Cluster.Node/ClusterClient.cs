@@ -1,4 +1,5 @@
-﻿using Cluster.Node.Connection;
+﻿using Cluster.Node.Authenticate;
+using Cluster.Node.Connection;
 using Cluster.Node.Extension;
 using Cluster.Node.Filter;
 using Cluster.Node.LoadBalance;
@@ -19,6 +20,8 @@ namespace Cluster.Node
         private Timer heartbeat;
         protected ClusterContext context;
         public Action OnReady;
+        public Action<IServiceProvider> OnStart;
+
         public ClusterClient()
         {
             collection = new ServiceCollection();
@@ -29,6 +32,7 @@ namespace Cluster.Node
             collection.AddSingleton<IGatewayProvider, GatewayProvider>();
             collection.AddSingleton<IGatewayPipeline, DefaultGatewayPipline>();
             collection.AddSingleton<DefaultGatewayFilter>();
+            collection.AddSingleton<NoneAuthenticateGatewayFilter>();
         }
 
         public ClusterClient ConfigureServices(Action<IServiceCollection> config)
@@ -42,6 +46,7 @@ namespace Cluster.Node
             collection.AddSingleton(config);
             return this;
         }
+        
 
         public void Build()
         {
@@ -51,9 +56,11 @@ namespace Cluster.Node
         public virtual void Start()
         {
             this.serviceProvider.GetService<IGatewayPipeline>().AddFilters(this.serviceProvider.GetService<DefaultGatewayFilter>());
+            this.serviceProvider.GetService<IGatewayPipeline>().AddFilters(this.serviceProvider.GetService<NoneAuthenticateGatewayFilter>());
+            this.OnStart?.Invoke(this.serviceProvider);                        
             Task.Factory.StartNew(async () =>
             {
-                context.ServerName = serviceProvider.GetService<ClusterOptions>().ServerName;                
+                context.ServiceName = serviceProvider.GetService<ClusterOptions>().ServiceName;                
                 await serviceProvider.GetService<IGatewayProvider>().Init();
                 context.ClusterNodes = await serviceProvider.GetService<IClusterNodeProvider>().GetClusterNodeList();
                 heartbeat = new Timer(async (x) =>

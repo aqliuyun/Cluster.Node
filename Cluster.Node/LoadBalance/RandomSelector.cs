@@ -23,6 +23,7 @@ namespace Cluster.Node.LoadBalance
         public virtual string GetGateway(List<ClusterNode> nodes)
         {
             var gateways = nodes.Select(x => x.Address).ToList();
+            if (gateways.Count == 0) return null;
             return gateways[random.Next(gateways.Count)];
         }
     }

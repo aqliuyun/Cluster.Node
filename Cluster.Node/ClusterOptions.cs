@@ -8,9 +8,14 @@ namespace Cluster.Node
 {
     public class ClusterOptions
     {
+        /// <summary>
+        /// cluster uniqueid
+        /// </summary>
         public string ClusterID { get; set; }
-
-        public string ServerName { get; set; }
+        /// <summary>
+        /// service's name in cluster
+        /// </summary>
+        public string ServiceName { get; set; }
         /// <summary>
         /// reconnection times
         /// </summary>

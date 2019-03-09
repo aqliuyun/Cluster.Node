@@ -13,6 +13,8 @@ namespace Cluster.Node.Connection
 
         void AddFilters(params IGatewayFilter[] filter);
 
+        void RemoveFilter(IGatewayFilter filter);
+
         void ClearFilters();
     }
 }
