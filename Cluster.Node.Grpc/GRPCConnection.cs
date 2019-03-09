@@ -14,7 +14,7 @@ namespace Cluster.Node.gRPC
         private Type _clienttype;
         private IGatewayProvider _gatewayProvider;
 
-        public GrpcConnection(IGatewayProvider gatewayProvider, ClusterContext context) : base(context)
+        public GrpcConnection(IGatewayProvider gatewayProvider, ConnectionContext context) : base(context)
         {
             this._gatewayProvider = gatewayProvider;
         }

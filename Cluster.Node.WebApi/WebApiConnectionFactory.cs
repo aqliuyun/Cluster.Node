@@ -10,8 +10,8 @@ namespace Cluster.Node.WebApi
     public class WebApiConnectionFactory : IClusterConnectionFactory
     {
         private IGatewayProvider _gatewayProvider;
-        private ClusterContext _context;
-        public WebApiConnectionFactory(IGatewayProvider gatewayProvider, ClusterContext context)
+        private ConnectionContext _context;
+        public WebApiConnectionFactory(IGatewayProvider gatewayProvider, ConnectionContext context)
         {
             this._gatewayProvider = gatewayProvider;
             this._context = context;

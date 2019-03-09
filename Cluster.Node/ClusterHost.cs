@@ -49,7 +49,7 @@ namespace Cluster.Node
         public void Start()
         {
             serviceProvider = collection.BuildServiceProvider();
-            context.ServiceName = serviceProvider.GetService<HostOptions>().ServiceName;
+            context.ConnectedServiceName = serviceProvider.GetService<HostOptions>().ServiceName;
             CurrentNode.Address = serviceProvider.GetService<HostOptions>().Address;
             Task.Factory.StartNew(async () =>
             {                

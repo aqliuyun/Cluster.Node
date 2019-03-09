@@ -21,7 +21,7 @@ namespace WcfServerA
         static void Main(string[] args)
         {
             var cluster = new ClusterHost();            
-            cluster.UseConfig<ClusterOptions>(new ClusterOptions()
+            cluster.UseConfig<HostOptions>(new HostOptions()
             {
                 ClusterID = "test"
             });

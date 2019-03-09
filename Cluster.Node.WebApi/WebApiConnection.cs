@@ -14,11 +14,11 @@ namespace Cluster.Node.WebApi
     {
         private IGatewayProvider _gatewayProvider;
         private HttpClient _instance;
-        public WebApiConnection(ClusterContext context) : base(context)
+        public WebApiConnection(ConnectionContext context) : base(context)
         {
         }
 
-        public WebApiConnection(IGatewayProvider gatewayProvider, ClusterContext context) : base(context)
+        public WebApiConnection(IGatewayProvider gatewayProvider, ConnectionContext context) : base(context)
         {
             this._gatewayProvider = gatewayProvider;
         }

@@ -10,7 +10,7 @@ namespace Cluster.Node.WebApi
     {
         public static void EnableCluster(this ClusterHost cluster)
         {
-            cluster.CurrentNode.Details.Add("name", cluster.GetConfig<ClusterOptions>().ServerName);
+            cluster.CurrentNode.Details.Add("name", cluster.GetConfig<HostOptions>().ServiceName);
         }
     }
 }

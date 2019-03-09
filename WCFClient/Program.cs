@@ -25,7 +25,7 @@ namespace WCFClient
                     {
                         x.AddSingleton<IClusterConnectionFactory, WcfConnectionFactory>();
                     });
-                    cluster.UseConfig<ClusterOptions>(new ClusterOptions()
+                    cluster.UseConfig<ClientOptions>(new ClientOptions()
                     {
                         ClusterID = "test"
                     });

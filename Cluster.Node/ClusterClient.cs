@@ -60,7 +60,7 @@ namespace Cluster.Node
             this.OnStart?.Invoke(this.serviceProvider);                        
             Task.Factory.StartNew(async () =>
             {
-                context.ServiceName = serviceProvider.GetService<ClientOptions>().ServiceName;                
+                context.ConnectedServiceName = serviceProvider.GetService<ClientOptions>().ServiceName;                
                 await serviceProvider.GetService<IGatewayProvider>().Init();
                 context.ClusterNodes = await serviceProvider.GetService<IClusterNodeProvider>().GetClusterNodeList();
                 heartbeat = new Timer(async (x) =>

@@ -21,7 +21,7 @@ namespace Cluster.Node.Wcf
         public IConnectionToken Register<T>(string endpointConfigName) where T : class
         {
             var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
-            var token = new InterfaceNameToken<T>();
+            var token = new ServiceTypeToken<T>();
             var connection = connectionManage.GetConnection(token);
             ((IWcfConnection)connection).Bind(endpointConfigName);
             return token;
@@ -30,7 +30,7 @@ namespace Cluster.Node.Wcf
         public T Service<T>() where T : class
         {
             var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
-            var connection = connectionManage.GetConnection(new InterfaceNameToken<T>());
+            var connection = connectionManage.GetConnection(new ServiceTypeToken<T>());
             return ((IWcfConnection)connection).As<T>();
         }
 

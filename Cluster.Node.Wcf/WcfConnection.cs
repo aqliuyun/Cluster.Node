@@ -17,7 +17,7 @@ namespace Cluster.Node.Wcf
         private Type _interface_type;
         private IGatewayProvider _gatewayProvider;
 
-        public WcfConnection(IGatewayProvider gatewayProvider, ClusterContext context) : base(context)
+        public WcfConnection(IGatewayProvider gatewayProvider, ConnectionContext context) : base(context)
         {
             this._gatewayProvider = gatewayProvider;
         }

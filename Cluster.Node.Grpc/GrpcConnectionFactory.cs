@@ -11,8 +11,8 @@ namespace Cluster.Node.gRPC
     public class GrpcConnectionFactory : IClusterConnectionFactory
     {
         private IGatewayProvider gatewayProvider;
-        private ClusterContext context;
-        public GrpcConnectionFactory(IGatewayProvider gatewayProvider,ClusterContext context)
+        private ConnectionContext context;
+        public GrpcConnectionFactory(IGatewayProvider gatewayProvider,ConnectionContext context)
         {
             this.gatewayProvider = gatewayProvider;
             this.context = context;

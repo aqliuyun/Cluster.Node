@@ -18,14 +18,17 @@ namespace Cluster.Node.Connection
         private IGatewaySelector gatewaySelector;
         private IGatewayProvider gatewayProvider;
         private IClusterNodeProvider clusterNodeProvider;
+        private ConnectionContext context;
         private ClientOptions options;
-        public DefaultConnectionManage(IClusterConnectionFactory factory,IClusterNodeProvider clusterNodeProvider,IGatewayPipeline gatewayFilter,IGatewaySelector gatewaySelector,ClientOptions options)
+        public DefaultConnectionManage(ConnectionContext context, IGatewayProvider gatewayProvider,IClusterConnectionFactory factory,IClusterNodeProvider clusterNodeProvider,IGatewayPipeline gatewayFilter,IGatewaySelector gatewaySelector,ClientOptions options)
         {
             this.factory = factory;
             this.clusterNodeProvider = clusterNodeProvider;
             this.gatewayFilter = gatewayFilter;
             this.gatewaySelector = gatewaySelector;
+            this.gatewayProvider = gatewayProvider;
             this.options = options;
+            this.context = context;
         }
 
         public IClusterConnection GetConnection(IConnectionToken token)
@@ -62,6 +65,17 @@ namespace Cluster.Node.Connection
                             connection.ReleaseLock();
                         }
                     });
+                });
+            };
+            connection.OnDisconnected += (gateway) =>
+            {
+                Task.Factory.StartNew(async () =>
+                {
+                    var node = this.gatewayProvider.GetClusterNode(gateway);
+                    await this.clusterNodeProvider.UpdateClusterNode(node, (x) => { x.NoReply++; });
+                    context.BlackList.Add(node);
+                    await Task.Delay(TimeSpan.FromSeconds(options.RestoreInterval));
+                    context.BlackList.Remove(node);
                 });
             };
             return connection;

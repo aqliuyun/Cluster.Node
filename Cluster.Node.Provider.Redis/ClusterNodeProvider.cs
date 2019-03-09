@@ -28,7 +28,7 @@ namespace Cluster.Node.Provider.Redis
             var nodes = _db.HashGetAll(_clusterOptions.ClusterID).Select(x => JsonConvert.DeserializeObject<ClusterNode>(x.Value));
             foreach (var node in nodes)
             {
-                if (node.NoReply >= _clusterOptions.MaxNoReply || (DateTime.Now - node.LastActiveTime) >= _clusterOptions.MaxNoActiveTime)
+                if (node.NoReply >= _clusterOptions.MaxNoReply || (DateTime.UtcNow - node.LastActiveTime) >= _clusterOptions.MaxNoActiveTime)
                 {
                     await _db.HashDeleteAsync(_clusterOptions.ClusterID, node.Address);
                 }
@@ -58,7 +58,7 @@ namespace Cluster.Node.Provider.Redis
             return await _db.HashSetAsync(_clusterOptions.ClusterID, node.Address, JsonConvert.SerializeObject(lastest));
         }
 
-        public async Task<bool> UpdateClusterNodeAsync(ClusterNode node)
+        public async Task<bool> UpdateClusterNode(ClusterNode node)
         {
             return await _db.HashSetAsync(_clusterOptions.ClusterID, node.Address, JsonConvert.SerializeObject(node));
         }

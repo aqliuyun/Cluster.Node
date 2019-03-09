@@ -11,8 +11,8 @@ namespace Cluster.Node.gRPC
 {
     public class GrpcGatewayFilter : IGatewayFilter
     {
-        private ClusterContext context;
-        public GrpcGatewayFilter(ClusterContext context)
+        private ConnectionContext context;
+        public GrpcGatewayFilter(ConnectionContext context)
         {
             this.context = context;
         }
@@ -24,7 +24,7 @@ namespace Cluster.Node.gRPC
             {
                 if (node.Details.TryGetValue("name", out string name))
                 {
-                    if (name.Equals(context.ServerName))
+                    if (name.Equals(context.ConnectedServiceName))
                     {
                         list.Add(node);
                     }

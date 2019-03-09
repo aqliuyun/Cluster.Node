@@ -11,8 +11,8 @@ namespace Cluster.Node.Wcf
     public class WcfConnectionFactory : IClusterConnectionFactory
     {
         private IGatewayProvider gatewayProvider;
-        private ClusterContext context;
-        public WcfConnectionFactory(IGatewayProvider gatewayProvider,ClusterContext context)
+        private ConnectionContext context;
+        public WcfConnectionFactory(IGatewayProvider gatewayProvider,ConnectionContext context)
         {
             this.gatewayProvider = gatewayProvider;
             this.context = context;

@@ -28,7 +28,7 @@ namespace Cluster.Node.gRPC
         public T Service<T>() where T : ClientBase, new()
         {
             var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
-            var connection = connectionManage.GetConnection(new ServiceNameToken(context.ServerName));
+            var connection = connectionManage.GetConnection(new ServiceNameToken(context.ConnectedServiceName));
             return ((IGrpcConnection)connection).As<T>();
         }
 

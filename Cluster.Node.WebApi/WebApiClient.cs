@@ -46,28 +46,28 @@ namespace Cluster.Node.WebApi
         public Task<T> Get<T>(string url)
         {
             var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
-            var connection = connectionManage.GetConnection(new ServiceNameToken(context.ServerName)) as IWebApiConnection;
+            var connection = connectionManage.GetConnection(new ServiceNameToken(context.ConnectedServiceName)) as IWebApiConnection;
             return connection.GetAsync<T>(url);
         }
 
         public Task<T> Post<T>(string url,object data)
         {
             var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
-            var connection = connectionManage.GetConnection(new ServiceNameToken(context.ServerName)) as IWebApiConnection;
+            var connection = connectionManage.GetConnection(new ServiceNameToken(context.ConnectedServiceName)) as IWebApiConnection;
             return connection.PostAsync<T>(url,data);
         }
 
         public Task<T> Put<T>(string url, object data)
         {
             var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
-            var connection = connectionManage.GetConnection(new ServiceNameToken(context.ServerName)) as IWebApiConnection;
+            var connection = connectionManage.GetConnection(new ServiceNameToken(context.ConnectedServiceName)) as IWebApiConnection;
             return connection.PutAsync<T>(url, data);
         }
 
         public Task<T> Delete<T>(string url)
         {
             var connectionManage = this.serviceProvider.GetService<IConnectionManage>();
-            var connection = connectionManage.GetConnection(new ServiceNameToken(context.ServerName)) as IWebApiConnection;
+            var connection = connectionManage.GetConnection(new ServiceNameToken(context.ConnectedServiceName)) as IWebApiConnection;
             return connection.DeleteAsync<T>(url);
         }
 
