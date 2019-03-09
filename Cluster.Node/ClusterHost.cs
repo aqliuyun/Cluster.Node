@@ -14,17 +14,17 @@ namespace Cluster.Node
         private IServiceProvider serviceProvider;
         private Timer heartbeat;
         public ClusterNode CurrentNode { get; private set; }
-        private ClusterContext context;
+        private ConnectionContext context;
       
         public ClusterHost()
         {
             collection = new ServiceCollection();
-            context = new ClusterContext();
+            context = new ConnectionContext();
             CurrentNode = new ClusterNode()
             {                
                 LastActiveTime = DateTime.UtcNow
             };
-            collection.AddSingleton<ClusterContext>(context);
+            collection.AddSingleton<ConnectionContext>(context);
             collection.AddSingleton<ClusterNode>(CurrentNode);
             collection.AddSingleton<IGatewayProvider, GatewayProvider>();
         }
@@ -49,7 +49,7 @@ namespace Cluster.Node
         public void Start()
         {
             serviceProvider = collection.BuildServiceProvider();
-            context.ServiceName = serviceProvider.GetService<ClusterOptions>().ServiceName;
+            context.ServiceName = serviceProvider.GetService<HostOptions>().ServiceName;
             CurrentNode.Address = serviceProvider.GetService<HostOptions>().Address;
             Task.Factory.StartNew(async () =>
             {                
@@ -59,7 +59,7 @@ namespace Cluster.Node
                 heartbeat = new Timer(async (x) =>
                 {
                     CurrentNode.LastActiveTime = DateTime.UtcNow;
-                    await serviceProvider.GetService<IClusterNodeProvider>().UpdateClusterNodeAsync(CurrentNode);
+                    await serviceProvider.GetService<IClusterNodeProvider>().UpdateClusterNode(CurrentNode);
                 }, null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
             });
         }

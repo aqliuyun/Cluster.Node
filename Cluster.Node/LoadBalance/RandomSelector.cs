@@ -11,9 +11,9 @@ namespace Cluster.Node.LoadBalance
     public class RandomSelector : IGatewaySelector
     {
         protected Random random;
-        protected ClusterContext context;
+        protected ConnectionContext context;
         protected IClusterConnectionFactory connectionFactory;
-        public RandomSelector(IClusterConnectionFactory connectionFactory, ClusterContext context)
+        public RandomSelector(IClusterConnectionFactory connectionFactory, ConnectionContext context)
         {
             this.connectionFactory = connectionFactory;
             random = new Random();

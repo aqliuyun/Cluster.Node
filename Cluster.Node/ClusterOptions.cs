@@ -17,14 +17,6 @@ namespace Cluster.Node
         /// </summary>
         public string ServiceName { get; set; }
         /// <summary>
-        /// reconnection times
-        /// </summary>
-        public int MaxRetryTimes { get; set; } = 5;
-        /// <summary>
-        /// reconnection delay time
-        /// </summary>
-        public int RetryInterval { get; set; } = 5;
-        /// <summary>
         /// max no reply times,will mark it dead
         /// </summary>
         public int MaxNoReply { get; set; } = 10;

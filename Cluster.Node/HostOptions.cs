@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Cluster.Node
 {
-    public class HostOptions
+    public class HostOptions : ClusterOptions
     {
+        /// <summary>
+        /// listen address
+        /// </summary>
         public string Address { get; set; }
     }
 }

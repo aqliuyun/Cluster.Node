@@ -9,8 +9,8 @@ namespace Cluster.Node.Connection
 {
     public class ClusterConnectionFactory
     {
-        private ClusterContext context;
-        public ClusterConnectionFactory(ClusterContext context)
+        private ConnectionContext context;
+        public ClusterConnectionFactory(ConnectionContext context)
         {
             this.context = context;
         }

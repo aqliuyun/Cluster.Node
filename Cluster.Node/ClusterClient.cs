@@ -18,15 +18,15 @@ namespace Cluster.Node
         protected IServiceCollection collection;
         protected IServiceProvider serviceProvider;
         private Timer heartbeat;
-        protected ClusterContext context;
+        protected ConnectionContext context;
         public Action OnReady;
         public Action<IServiceProvider> OnStart;
 
         public ClusterClient()
         {
             collection = new ServiceCollection();
-            context = new ClusterContext();
-            collection.AddSingleton<ClusterContext>(context);
+            context = new ConnectionContext();
+            collection.AddSingleton<ConnectionContext>(context);
             collection.AddSingleton<IGatewaySelector, RandomSelector>();
             collection.AddSingleton<IConnectionManage, DefaultConnectionManage>();
             collection.AddSingleton<IGatewayProvider, GatewayProvider>();
@@ -60,7 +60,7 @@ namespace Cluster.Node
             this.OnStart?.Invoke(this.serviceProvider);                        
             Task.Factory.StartNew(async () =>
             {
-                context.ServiceName = serviceProvider.GetService<ClusterOptions>().ServiceName;                
+                context.ServiceName = serviceProvider.GetService<ClientOptions>().ServiceName;                
                 await serviceProvider.GetService<IGatewayProvider>().Init();
                 context.ClusterNodes = await serviceProvider.GetService<IClusterNodeProvider>().GetClusterNodeList();
                 heartbeat = new Timer(async (x) =>

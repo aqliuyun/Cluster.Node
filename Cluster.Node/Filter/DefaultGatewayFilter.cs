@@ -9,8 +9,8 @@ namespace Cluster.Node.Filter
 {
     public class DefaultGatewayFilter : IGatewayFilter
     {
-        private ClusterContext _context;
-        public DefaultGatewayFilter(ClusterContext context)
+        private ConnectionContext _context;
+        public DefaultGatewayFilter(ConnectionContext context)
         {
             this._context = context;
         }

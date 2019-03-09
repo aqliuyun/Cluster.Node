@@ -18,8 +18,8 @@ namespace Cluster.Node.Connection
         private IGatewaySelector gatewaySelector;
         private IGatewayProvider gatewayProvider;
         private IClusterNodeProvider clusterNodeProvider;
-        private ClusterOptions options;
-        public DefaultConnectionManage(IClusterConnectionFactory factory,IClusterNodeProvider clusterNodeProvider,IGatewayPipeline gatewayFilter,IGatewaySelector gatewaySelector,ClusterOptions options)
+        private ClientOptions options;
+        public DefaultConnectionManage(IClusterConnectionFactory factory,IClusterNodeProvider clusterNodeProvider,IGatewayPipeline gatewayFilter,IGatewaySelector gatewaySelector,ClientOptions options)
         {
             this.factory = factory;
             this.clusterNodeProvider = clusterNodeProvider;

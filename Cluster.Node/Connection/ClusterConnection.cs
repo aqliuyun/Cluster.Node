@@ -10,7 +10,7 @@ namespace Cluster.Node.Connection
 {
     public class ClusterConnection : IClusterConnection
     {
-        protected ClusterContext context;
+        protected ConnectionContext context;
         protected string gateway;
         private int _retryTime = 0;
         public int RetryTimes { get { return _retryTime; } private set { _retryTime = value; } }
@@ -18,7 +18,7 @@ namespace Cluster.Node.Connection
         public Action<string> OnRetryConnect;
         public Action<string> OnDisconnected;
         private SemaphoreSlim semaphore;
-        public ClusterConnection(ClusterContext context)
+        public ClusterConnection(ConnectionContext context)
         {
             this.context = context;
             this.semaphore = new SemaphoreSlim(1);

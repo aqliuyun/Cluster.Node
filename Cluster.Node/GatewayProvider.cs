@@ -9,9 +9,9 @@ namespace Cluster.Node
     public class GatewayProvider : IGatewayProvider
     {
         private IClusterNodeProvider provider;
-        private ClusterContext context;
+        private ConnectionContext context;
       
-        public GatewayProvider(IClusterNodeProvider provider,ClusterContext context)
+        public GatewayProvider(IClusterNodeProvider provider,ConnectionContext context)
         {
             this.provider = provider;
             this.context = context;

@@ -11,8 +11,8 @@ namespace Cluster.Node.Connection
     public class DefaultGatewayPipline : IGatewayPipeline
     {
         private List<IGatewayFilter> filters = new List<IGatewayFilter>();
-        private ClusterContext context;
-        public DefaultGatewayPipline(ClusterContext context)
+        private ConnectionContext context;
+        public DefaultGatewayPipline(ConnectionContext context)
         {
             this.context = context;
         }

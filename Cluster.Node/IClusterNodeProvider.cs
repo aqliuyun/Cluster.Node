@@ -14,7 +14,7 @@ namespace Cluster.Node
 
         Task<bool> RemoveClusterNode(ClusterNode node);
 
-        Task<bool> UpdateClusterNodeAsync(ClusterNode node);
+        Task<bool> UpdateClusterNode(ClusterNode node);
 
         Task<bool> UpdateClusterNode(ClusterNode node,Action<ClusterNode> updateAction);
     }
